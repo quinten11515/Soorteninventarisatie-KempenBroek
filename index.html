@@ -10,55 +10,72 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
 <style>
-  body { margin:0; font-family: Arial; }
-  #map { height: 100vh; }
+    body { margin:0; font-family: Arial; }
+    #map { height: 100vh; }
 
-  .panel {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-    background: white;
-    padding: 12px;
-    border-radius: 10px;
-    width: 260px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  }
+    .panel {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        background: white;
+        padding: 12px;
+        border-radius: 10px;
+        width: 260px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
 
-  label { display:block; font-size: 13px; margin: 3px 0; }
+    label { display:block; font-size: 13px; margin: 3px 0; }
 
-  .scroll-box {
-    max-height: 130px;
-    overflow-y: auto;
-    font-size: 12px;
-    border: 1px solid #ddd;
-    padding: 6px;
-    border-radius: 6px;
-  }
+    .scroll-box {
+        max-height: 130px;
+        overflow-y: auto;
+        font-size: 12px;
+        border: 1px solid #ddd;
+        padding: 6px;
+        border-radius: 6px;
+    }
+
+    .image-upload {
+        margin: 8px 0;
+        font-size: 12px;
+    }
+
+    .image-upload input {
+        font-size: 11px;
+        padding: 4px;
+    }
 </style>
 </head>
 
 <body>
 
 <div class="panel">
-  <b>KempenBroek filters</b>
+    <b>KempenBroek filters</b>
 
-  <hr/>
+    <hr/>
 
-  <b>Species</b>
-  <label><input type="checkbox" class="species" value="Red deer" checked> Red deer</label>
-  <label><input type="checkbox" class="species" value="Roe deer" checked> Roe deer</label>
-  <label><input type="checkbox" class="species" value="Wild boar" checked> Wild boar</label>
-  <label><input type="checkbox" class="species" value="Red fox" checked> Red fox</label>
-  <label><input type="checkbox" class="species" value="Badger" checked> Badger</label>
-  <label><input type="checkbox" class="species" value="Hare" checked> Hare</label>
-  <label><input type="checkbox" class="species" value="Marten" checked> Pine marten</label>
+    <b>Species</b>
+    <label><input type="checkbox" class="species" value="Red deer" checked> Red deer</label>
+    <label><input type="checkbox" class="species" value="Roe deer" checked> Roe deer</label>
+    <label><input type="checkbox" class="species" value="Wild boar" checked> Wild boar</label>
+    <label><input type="checkbox" class="species" value="Red fox" checked> Red fox</label>
+    <label><input type="checkbox" class="species" value="Badger" checked> Badger</label>
+    <label><input type="checkbox" class="species" value="Hare" checked> Hare</label>
+    <label><input type="checkbox" class="species" value="Marten" checked> Pine marten</label>
 
-  <hr/>
+    <hr/>
 
-  <b>Spring progression</b><br/>
-  <input type="range" id="weekSlider" min="1" max="12" value="12"/>
-  <div id="weekLabel">All weeks</div>
+    <b>Spring progression</b><br/>
+    <input type="range" id="weekSlider" min="1" max="12" value="12"/>
+    <div id="weekLabel">All weeks</div>
+
+    <hr/>
+
+    <b>Camera Images</b>
+    <div id="imageUploads"></div>
 </div>
 
 <div id="map"></div>
@@ -68,7 +85,7 @@
 const map = L.map('map').setView([51.25, 5.70], 10);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap'
+    attribution: '&copy; OpenStreetMap'
 }).addTo(map);
 
 //////////////////////////////////////////////////////
@@ -76,55 +93,55 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //////////////////////////////////////////////////////
 
 const data = [
-  {
-    name: "Stramproy Forest",
-    lat: 51.192,
-    lng: 5.718,
-    detections: [
-      { species:"Red deer", week: 2 },
-      { species:"Red fox", week: 3 },
-      { species:"Wild boar", week: 4 },
-      { species:"Roe deer", week: 5 },
-      { species:"Red deer", week: 9 },
-      { species:"Badger", week: 10 }
-    ]
-  },
-  {
-    name: "Tungelerwallen",
-    lat: 51.255,
-    lng: 5.665,
-    detections: [
-      { species:"Roe deer", week: 2 },
-      { species:"Red fox", week: 4 },
-      { species:"Hare", week: 6 },
-      { species:"Red deer", week: 8 },
-      { species:"Wild boar", week: 10 }
-    ]
-  },
-  {
-    name: "Wijffelterbroek",
-    lat: 51.17,
-    lng: 5.69,
-    detections: [
-      { species:"Wild boar", week: 1 },
-      { species:"Wild boar", week: 3 },
-      { species:"Red deer", week: 6 },
-      { species:"Red fox", week: 7 },
-      { species:"Marten", week: 9 }
-    ]
-  },
-  {
-    name: "Maas Corridor",
-    lat: 51.28,
-    lng: 5.75,
-    detections: [
-      { species:"Red fox", week: 2 },
-      { species:"Red fox", week: 5 },
-      { species:"Roe deer", week: 7 },
-      { species:"Wild boar", week: 11 },
-      { species:"Hare", week: 12 }
-    ]
-  }
+    {
+        name: "Stramproy Forest",
+        lat: 51.192,
+        lng: 5.718,
+        detections: [
+            { species:"Red deer", week: 2 },
+            { species:"Red fox", week: 3 },
+            { species:"Wild boar", week: 4 },
+            { species:"Roe deer", week: 5 },
+            { species:"Red deer", week: 9 },
+            { species:"Badger", week: 10 }
+        ]
+    },
+    {
+        name: "Tungelerwallen",
+        lat: 51.255,
+        lng: 5.665,
+        detections: [
+            { species:"Roe deer", week: 2 },
+            { species:"Red fox", week: 4 },
+            { species:"Hare", week: 6 },
+            { species:"Red deer", week: 8 },
+            { species:"Wild boar", week: 10 }
+        ]
+    },
+    {
+        name: "Wijffelterbroek",
+        lat: 51.17,
+        lng: 5.69,
+        detections: [
+            { species:"Wild boar", week: 1 },
+            { species:"Wild boar", week: 3 },
+            { species:"Red deer", week: 6 },
+            { species:"Red fox", week: 7 },
+            { species:"Marten", week: 9 }
+        ]
+    },
+    {
+        name: "Maas Corridor",
+        lat: 51.28,
+        lng: 5.75,
+        detections: [
+            { species:"Red fox", week: 2 },
+            { species:"Red fox", week: 5 },
+            { species:"Roe deer", week: 7 },
+            { species:"Wild boar", week: 11 },
+            { species:"Hare", week: 12 }
+        ]
+    }
 ];
 
 //////////////////////////////////////////////////////
@@ -133,14 +150,50 @@ const data = [
 
 let markers = {};
 let charts = {};
+let siteImages = {};
 
 function getSpecies() {
-  return Array.from(document.querySelectorAll('.species:checked'))
-    .map(cb => cb.value);
+    return Array.from(document.querySelectorAll('.species:checked'))
+        .map(cb => cb.value);
 }
 
 function getWeek() {
-  return parseInt(document.getElementById("weekSlider").value);
+    return parseInt(document.getElementById("weekSlider").value);
+}
+
+//////////////////////////////////////////////////////
+// INIT IMAGE UPLOADS
+//////////////////////////////////////////////////////
+
+function initImageUploads() {
+    const container = document.getElementById("imageUploads");
+    container.innerHTML = "";
+    
+    data.forEach(site => {
+        const div = document.createElement("div");
+        div.className = "image-upload";
+        
+        const label = document.createElement("label");
+        label.textContent = site.name + ": ";
+        
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    siteImages[site.name] = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        div.appendChild(label);
+        div.appendChild(input);
+        container.appendChild(div);
+    });
 }
 
 //////////////////////////////////////////////////////
@@ -149,125 +202,131 @@ function getWeek() {
 
 function render() {
 
-  const speciesFilter = getSpecies();
-  const week = getWeek();
+    const speciesFilter = getSpecies();
+    const week = getWeek();
 
-  document.getElementById("weekLabel").innerText =
-    week === 12 ? "Full spring (all weeks)" : "Up to week " + week;
+    document.getElementById("weekLabel").innerText =
+        week === 12 ? "Full spring (all weeks)" : "Up to week " + week;
 
-  Object.values(markers).forEach(m => map.removeLayer(m));
-  markers = {};
-  charts = {};
+    Object.values(markers).forEach(m => map.removeLayer(m));
+    markers = {};
+    charts = {};
 
-  data.forEach(site => {
+    data.forEach(site => {
 
-    const filtered = site.detections.filter(d =>
-      speciesFilter.includes(d.species) &&
-      d.week <= week
-    );
+        const filtered = site.detections.filter(d =>
+            speciesFilter.includes(d.species) &&
+            d.week <= week
+        );
 
-    if (filtered.length === 0) return;
+        if (filtered.length === 0) return;
 
-    //////////////////////////////////////////////////////
-    // COUNT SPECIES
-    //////////////////////////////////////////////////////
-    const counts = {};
-    filtered.forEach(d => {
-      counts[d.species] = (counts[d.species] || 0) + 1;
-    });
-
-    //////////////////////////////////////////////////////
-    // SORT (BIGGEST → SMALLEST)
-    //////////////////////////////////////////////////////
-    const sorted = Object.entries(counts)
-      .sort((a,b) => b[1] - a[1]);
-
-    //////////////////////////////////////////////////////
-    // TOP 3 ALWAYS
-    //////////////////////////////////////////////////////
-    const top3 = sorted.slice(0, 3);
-
-    const labels = top3.map(d => d[0]);
-    const values = top3.map(d => d[1]);
-
-    //////////////////////////////////////////////////////
-    // FULL LIST (SORTED)
-    //////////////////////////////////////////////////////
-    const fullList = sorted
-      .map(([sp, count]) => `${sp}: <b>${count}</b>`)
-      .join("<br/>");
-
-    const safeId = site.name.replace(/\s/g, '-');
-
-    //////////////////////////////////////////////////////
-    // MARKER
-    //////////////////////////////////////////////////////
-    const marker = L.circleMarker([site.lat, site.lng], {
-      radius: 6 + filtered.length,
-      color: "#2c5282",
-      fillColor: "#63b3ed",
-      fillOpacity: 0.7
-    }).addTo(map);
-
-    const popupContent = `
-      <div style="width:330px">
-
-        <b>${site.name}</b>
-
-        <div style="height:180px">
-          <canvas id="chart-${safeId}"></canvas>
-        </div>
-
-        <hr/>
-
-        <b>Top 3 species</b><br/>
-        ${top3.map((d,i) => `${i+1}. ${d[0]} (${d[1]})`).join("<br/>")}
-
-        <hr/>
-
-        <b>All detections (sorted)</b>
-
-        <div class="scroll-box">
-          ${fullList}
-        </div>
-
-      </div>
-    `;
-
-    marker.bindPopup(popupContent);
-
-    marker.on("popupopen", () => {
-
-      setTimeout(() => {
-
-        const ctx = document
-          .getElementById(`chart-${safeId}`)
-          .getContext("2d");
-
-        if (charts[safeId]) charts[safeId].destroy();
-
-        charts[safeId] = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels,
-            datasets: [{
-              label: "Top 3 species",
-              data: values,
-              backgroundColor: ["#2b6cb0", "#4299e1", "#90cdf4"]
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false
-          }
+        //////////////////////////////////////////////////////
+        // COUNT SPECIES
+        //////////////////////////////////////////////////////
+        const counts = {};
+        filtered.forEach(d => {
+            counts[d.species] = (counts[d.species] || 0) + 1;
         });
 
-      }, 50);
+        //////////////////////////////////////////////////////
+        // SORT (BIGGEST → SMALLEST)
+        //////////////////////////////////////////////////////
+        const sorted = Object.entries(counts)
+            .sort((a,b) => b[1] - a[1]);
 
+        //////////////////////////////////////////////////////
+        // TOP 3 ALWAYS
+        //////////////////////////////////////////////////////
+        const top3 = sorted.slice(0, 3);
+
+        const labels = top3.map(d => d[0]);
+        const values = top3.map(d => d[1]);
+
+        //////////////////////////////////////////////////////
+        // FULL LIST (SORTED)
+        //////////////////////////////////////////////////////
+        const fullList = sorted
+            .map(([sp, count]) => `${sp}: <b>${count}</b>`)
+            .join("<br/>");
+
+        const safeId = site.name.replace(/\s/g, '-');
+
+        //////////////////////////////////////////////////////
+        // MARKER
+        //////////////////////////////////////////////////////
+        const marker = L.circleMarker([site.lat, site.lng], {
+            radius: 6 + filtered.length,
+            color: "#2c5282",
+            fillColor: "#63b3ed",
+            fillOpacity: 0.7
+        }).addTo(map);
+
+        const imageHtml = siteImages[site.name] 
+            ? `<img src="${siteImages[site.name]}" style="width:100%;border-radius:6px;margin-bottom:10px;max-height:150px;object-fit:cover;"/>`
+            : "";
+
+        const popupContent = `
+            <div style="width:330px">
+
+                <b>${site.name}</b>
+
+                ${imageHtml}
+
+                <div style="height:180px">
+                    <canvas id="chart-${safeId}"></canvas>
+                </div>
+
+                <hr/>
+
+                <b>Top 3 species</b><br/>
+                ${top3.map((d,i) => `${i+1}. ${d[0]} (${d[1]})`).join("<br/>")}
+
+                <hr/>
+
+                <b>All detections (sorted)</b>
+
+                <div class="scroll-box">
+                    ${fullList}
+                </div>
+
+            </div>
+        `;
+
+        marker.bindPopup(popupContent);
+
+        marker.on("popupopen", () => {
+
+            setTimeout(() => {
+
+                const ctx = document
+                    .getElementById(`chart-${safeId}`)
+                    .getContext("2d");
+
+                if (charts[safeId]) charts[safeId].destroy();
+
+                charts[safeId] = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: "Top 3 species",
+                            data: values,
+                            backgroundColor: ["#2b6cb0", "#4299e1", "#90cdf4"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+
+            }, 50);
+
+        });
+
+        markers[site.name] = marker;
     });
-
-    markers[site.name] = marker;
-  });
 }
 
 //////////////////////////////////////////////////////
@@ -275,14 +334,18 @@ function render() {
 //////////////////////////////////////////////////////
 
 document.querySelectorAll('.species')
-  .forEach(cb => cb.addEventListener('change', render));
+    .forEach(cb => cb.addEventListener('change', render));
 
 document.getElementById('weekSlider')
-  .addEventListener('input', render);
+    .addEventListener('input', render);
 
+initImageUploads();
 render();
 
 </script>
+
+</body>
+</html>
 
 </body>
 </html>

@@ -37,16 +37,6 @@
         padding: 6px;
         border-radius: 6px;
     }
-
-    .image-upload {
-        margin: 8px 0;
-        font-size: 12px;
-    }
-
-    .image-upload input {
-        font-size: 11px;
-        padding: 4px;
-    }
 </style>
 </head>
 
@@ -58,24 +48,18 @@
     <hr/>
 
     <b>Species</b>
-    <label><input type="checkbox" class="species" value="Red deer" checked> Red deer</label>
-    <label><input type="checkbox" class="species" value="Roe deer" checked> Roe deer</label>
-    <label><input type="checkbox" class="species" value="Wild boar" checked> Wild boar</label>
-    <label><input type="checkbox" class="species" value="Red fox" checked> Red fox</label>
-    <label><input type="checkbox" class="species" value="Badger" checked> Badger</label>
-    <label><input type="checkbox" class="species" value="Hare" checked> Hare</label>
-    <label><input type="checkbox" class="species" value="Marten" checked> Pine marten</label>
+    <label><input type="checkbox" class="species" value="bever" checked> Bever</label>
+    <label><input type="checkbox" class="species" value="boommarter" checked> Boommarter</label>
+    <label><input type="checkbox" class="species" value="steenmarter" checked> Steenmarter</label>
+    <label><input type="checkbox" class="species" value="grauwe gans" checked> Grauwe gans</label>
+    <label><input type="checkbox" class="species" value="groene specht" checked> Groene specht</label>
+    <label><input type="checkbox" class="species" value="wild zwijn" checked> Wild zwijn</label>
 
     <hr/>
 
-    <b>Spring progression</b><br/>
-    <input type="range" id="weekSlider" min="1" max="12" value="12"/>
-    <div id="weekLabel">All weeks</div>
-
-    <hr/>
-
-    <b>Camera Images</b>
-    <div id="imageUploads"></div>
+    <b>Lentefilter</b><br/>
+    <input type="range" id="dateSlider" min="0" max="91" value="91"/>
+    <div id="dateLabel">1 maart t/m 31 mei</div>
 </div>
 
 <div id="map"></div>
@@ -94,52 +78,76 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const data = [
     {
-        name: "Stramproy Forest",
-        lat: 51.192,
-        lng: 5.718,
+        name: "Voorbeeldlocatie 1",
+        lat: 51.202700,
+        lng: 5.636626,
         detections: [
-            { species:"Red deer", week: 2 },
-            { species:"Red fox", week: 3 },
-            { species:"Wild boar", week: 4 },
-            { species:"Roe deer", week: 5 },
-            { species:"Red deer", week: 9 },
-            { species:"Badger", week: 10 }
+            { species:"bever", date: "2026-03-05" },
+            { species:"wild zwijn", date: "2026-03-18" },
+            { species:"boommarter", date: "2026-04-02" },
+            { species:"grauwe gans", date: "2026-04-19" },
+            { species:"groene specht", date: "2026-05-07" },
+            { species:"bever", date: "2026-05-24" }
         ]
     },
     {
-        name: "Tungelerwallen",
-        lat: 51.255,
-        lng: 5.665,
+        name: "Voorbeeldlocatie 2",
+        lat: 51.201541,
+        lng: 5.650535,
         detections: [
-            { species:"Roe deer", week: 2 },
-            { species:"Red fox", week: 4 },
-            { species:"Hare", week: 6 },
-            { species:"Red deer", week: 8 },
-            { species:"Wild boar", week: 10 }
+            { species:"grauwe gans", date: "2026-03-09" },
+            { species:"steenmarter", date: "2026-03-27" },
+            { species:"wild zwijn", date: "2026-04-11" },
+            { species:"groene specht", date: "2026-05-02" },
+            { species:"boommarter", date: "2026-05-26" }
         ]
     },
     {
-        name: "Wijffelterbroek",
-        lat: 51.17,
-        lng: 5.69,
+        name: "Voorbeeldlocatie 3",
+        lat: 51.229940,
+        lng: 5.627068,
         detections: [
-            { species:"Wild boar", week: 1 },
-            { species:"Wild boar", week: 3 },
-            { species:"Red deer", week: 6 },
-            { species:"Red fox", week: 7 },
-            { species:"Marten", week: 9 }
+            { species:"wild zwijn", date: "2026-03-12" },
+            { species:"bever", date: "2026-04-01" },
+            { species:"grauwe gans", date: "2026-04-23" },
+            { species:"steenmarter", date: "2026-05-10" },
+            { species:"wild zwijn", date: "2026-05-29" }
         ]
     },
     {
-        name: "Maas Corridor",
-        lat: 51.28,
-        lng: 5.75,
+        name: "Voorbeeldlocatie 4",
+        lat: 51.213297,
+        lng: 5.663969,
         detections: [
-            { species:"Red fox", week: 2 },
-            { species:"Red fox", week: 5 },
-            { species:"Roe deer", week: 7 },
-            { species:"Wild boar", week: 11 },
-            { species:"Hare", week: 12 }
+            { species:"groene specht", date: "2026-03-03" },
+            { species:"boommarter", date: "2026-03-21" },
+            { species:"bever", date: "2026-04-14" },
+            { species:"wild zwijn", date: "2026-05-05" },
+            { species:"grauwe gans", date: "2026-05-30" }
+        ]
+    },
+    {
+        name: "Voorbeeldlocatie 5",
+        lat: 51.217144,
+        lng: 5.776696,
+        detections: [
+            { species:"steenmarter", date: "2026-03-07" },
+            { species:"grauwe gans", date: "2026-03-29" },
+            { species:"wild zwijn", date: "2026-04-08" },
+            { species:"bever", date: "2026-04-28" },
+            { species:"groene specht", date: "2026-05-18" }
+        ]
+    },
+    {
+        name: "Voorbeeldlocatie 6",
+        lat: 51.235995,
+        lng: 5.780642,
+        detections: [
+            { species:"boommarter", date: "2026-03-15" },
+            { species:"bever", date: "2026-04-05" },
+            { species:"wild zwijn", date: "2026-04-22" },
+            { species:"steenmarter", date: "2026-05-09" },
+            { species:"grauwe gans", date: "2026-05-23" }
         ]
     }
 ];
@@ -150,49 +158,30 @@ const data = [
 
 let markers = {};
 let charts = {};
-let siteImages = {};
 
 function getSpecies() {
     return Array.from(document.querySelectorAll('.species:checked'))
         .map(cb => cb.value);
 }
 
-function getWeek() {
-    return parseInt(document.getElementById("weekSlider").value);
+function getSelectedDate() {
+    const sliderDays = parseInt(document.getElementById("dateSlider").value, 10);
+    const date = new Date(2026, 2, 1);
+    date.setDate(date.getDate() + sliderDays);
+    return date;
 }
 
-//////////////////////////////////////////////////////
-// INIT IMAGE UPLOADS
-//////////////////////////////////////////////////////
+function formatDate(date) {
+    return date.toLocaleDateString("nl-NL", {
+        day: "numeric",
+        month: "long"
+    });
+}
 
-function initImageUploads() {
-    const container = document.getElementById("imageUploads");
-    container.innerHTML = "";
-    
-    data.forEach(site => {
-        const div = document.createElement("div");
-        div.className = "image-upload";
-        
-        const label = document.createElement("label");
-        label.textContent = site.name + ": ";
-        
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = "image/*";
-        input.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (evt) => {
-                    siteImages[site.name] = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        div.appendChild(label);
-        div.appendChild(input);
-        container.appendChild(div);
+function formatDetectionDate(dateText) {
+    return new Date(dateText + "T00:00:00").toLocaleDateString("nl-NL", {
+        day: "numeric",
+        month: "long"
     });
 }
 
@@ -203,10 +192,13 @@ function initImageUploads() {
 function render() {
 
     const speciesFilter = getSpecies();
-    const week = getWeek();
+    const selectedDate = getSelectedDate();
+    const selectedDateText = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
 
-    document.getElementById("weekLabel").innerText =
-        week === 12 ? "Full spring (all weeks)" : "Up to week " + week;
+    document.getElementById("dateLabel").innerText =
+        selectedDateText === "2026-05-31"
+            ? "1 maart t/m 31 mei"
+            : `Tot en met ${formatDate(selectedDate)}`;
 
     Object.values(markers).forEach(m => map.removeLayer(m));
     markers = {};
@@ -216,7 +208,7 @@ function render() {
 
         const filtered = site.detections.filter(d =>
             speciesFilter.includes(d.species) &&
-            d.week <= week
+            d.date <= selectedDateText
         );
 
         if (filtered.length === 0) return;
@@ -262,16 +254,10 @@ function render() {
             fillOpacity: 0.7
         }).addTo(map);
 
-        const imageHtml = siteImages[site.name] 
-            ? `<img src="${siteImages[site.name]}" style="width:100%;border-radius:6px;margin-bottom:10px;max-height:150px;object-fit:cover;"/>`
-            : "";
-
         const popupContent = `
             <div style="width:330px">
 
                 <b>${site.name}</b>
-
-                ${imageHtml}
 
                 <div style="height:180px">
                     <canvas id="chart-${safeId}"></canvas>
@@ -287,7 +273,18 @@ function render() {
                 <b>All detections (sorted)</b>
 
                 <div class="scroll-box">
-                    ${fullList}
+                    ${sorted.map(([sp, count]) => `${sp}: <b>${count}</b>`).join("<br/>")}
+                </div>
+
+                <hr/>
+
+                <b>Detectiedata</b><br/>
+                <div class="scroll-box">
+                    ${filtered
+                        .slice()
+                        .sort((a, b) => a.date.localeCompare(b.date))
+                        .map(d => `${formatDetectionDate(d.date)}: ${d.species}`)
+                        .join("<br/>")}
                 </div>
 
             </div>
@@ -336,16 +333,11 @@ function render() {
 document.querySelectorAll('.species')
     .forEach(cb => cb.addEventListener('change', render));
 
-document.getElementById('weekSlider')
+document.getElementById('dateSlider')
     .addEventListener('input', render);
-
-initImageUploads();
 render();
 
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
